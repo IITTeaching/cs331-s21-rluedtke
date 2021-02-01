@@ -22,7 +22,16 @@ def captured_output():
 
 # implement this function
 def is_perfect(n):
-    pass
+   divisors = []
+   sum = 0
+   for i in range(1,n):
+    if n != 0:
+      if n % i ==0:
+        divisors.append(i)
+   for i in range(len(divisors)):
+     sum += divisors[i]
+   if sum == n: 
+     return True
 
 # (3 points)
 def test1():
@@ -40,7 +49,14 @@ def test1():
 
 # implement this function
 def multiples_of_3_and_5(n):
-    pass
+    multiples = []
+    sum = 0 
+    for i in range(n):
+        if i % 3 == 0 or i % 5 == 0: 
+            multiples.append(i)
+    for i in range(len(multiples)):
+        sum += multiples[i]
+    return sum
 
 # (3 points)
 def test2():
@@ -53,7 +69,14 @@ def test2():
 # EXERCISE 3
 #################################################################################
 def integer_right_triangles(p):
-    pass
+    numTriangles = 0
+    if p % 2 != 0: 
+      return 0
+    for i in range(1,p//2):
+      for j in range(1,p-i-1):
+        if (i*i + j*j == (p-i-j)*(p-i-j)):
+          numTriangles = numTriangles + 1
+    return numTriangles/2
 
 def test3():
     tc = unittest.TestCase()
@@ -67,7 +90,18 @@ def test3():
 
 # implement this function
 def gen_pattern(chars):
-    pass
+  length = len(chars)
+  width = length *4 -3
+  height = length * 2 -1
+  backwards = chars[::-1]
+  answer = []
+  for i in range(length):
+    string = backwards[:i+1] + chars[length-1:]
+    string = '.'.join(string)
+    string = string.center(length, '.')
+    answer.insert(i,string)
+  for i in range(0,len(answer)):
+    print(answer[i])
 
 def test4():
     tc = unittest.TestCase()
