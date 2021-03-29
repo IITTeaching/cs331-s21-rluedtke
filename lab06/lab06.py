@@ -47,10 +47,24 @@ class Stack:
 ################################################################################
 def check_delimiters(expr):
     """Returns True if and only if `expr` contains only correctly matched delimiters, else returns False."""
-    delim_openers = '{([<'
-    delim_closers = '})]>'
+    delimopeners = '{([<'
 
+    delimclosers = '})]>'
     ### BEGIN SOLUTION
+    s = Stack()
+    for c in expr:
+        for opener in delimopeners:
+            if c == opener:
+                s.push(delimopeners.index(c))
+        for closer in delimclosers:
+            if c == closer:
+                try:
+                    a = s.pop()
+                    if not delimclosers[a] == closer:
+                        return False
+                except:
+                    return False
+    return s.empty()
     ### END SOLUTION
 
 ################################################################################
@@ -116,11 +130,34 @@ def infix_to_postfix(expr):
     """Returns the postfix form of the infix expression found in `expr`"""
     # you may find the following precedence dictionary useful
     prec = {'*': 2, '/': 2,
-            '+': 1, '-': 1}
+            '+': 1, '-': 1, "(":0}
+    nonnums = "*/+-()"
     ops = Stack()
     postfix = []
     toks = expr.split()
     ### BEGIN SOLUTION
+    for x in toks:
+        if x not in nonnums:
+            postfix.append(x)
+        elif x == "(":
+            ops.push("(")
+        elif x == ")":
+            cont = True
+            while cont:
+                a = ops.pop()
+                if a == "(":
+                    cont = False
+                    break
+                else:
+                    postfix.append(a)
+        elif x in prec: 
+            while ops.peek() != None and prec[ops.peek()] >= prec[x]:
+                postfix.append(ops.pop())
+               # print("all good")
+            ops.push(x)
+    for a in ops:
+        postfix.append(ops.pop())
+  #  print("sol for post", postfix)
     ### END SOLUTION
     return ' '.join(postfix)
 
@@ -160,25 +197,61 @@ class Queue:
         self.data = [None] * limit
         self.head = -1
         self.tail = -1
+        self.max = limit
+        self.items =0
 
     ### BEGIN SOLUTION
     ### END SOLUTION
 
     def enqueue(self, val):
         ### BEGIN SOLUTION
+      #  print("head", self.head,"tail",self.tail,"data",self.data,"adding on",val)
+        if self.items == self.max:
+            raise RuntimeError
+        else:
+            self.items+=1
+
+        if self.head == -1:
+            self.head=0
+        self.tail+=1
+        if self.tail == len(self.data):
+            self.tail =0
+        self.data[self.tail]= val
+
         ### END SOLUTION
 
     def dequeue(self):
         ### BEGIN SOLUTION
+       # print("head", self.head,"tail",self.tail,"data",self.data)
+        ret = self.data[self.head]
+        self.data[self.head] = None
+        self.head +=1
+        if self.head==self.max:
+           self.head = 0
+        self.items -=1
+        return ret
         ### END SOLUTION
 
     def resize(self, newsize):
         assert(len(self.data) < newsize)
         ### BEGIN SOLUTION
+       # print("head", self.head,"tail",self.tail,"data",self.data,"newsize",newsize)
+        data2 = [None] * newsize
+        data2[0] = self.data[self.head]
+        for i in range (self.tail+1):
+            data2[i+1] = self.data[i]
+        self.head = 0
+        self.tail+=1
+        self.data = data2
+        self.max = newsize
+        #print("head", self.head,"tail",self.tail,"data",self.data,"newsize",newsize)
         ### END SOLUTION
 
     def empty(self):
         ### BEGIN SOLUTION
+        if self.items ==0:
+            self.head, self.tail = -1,-1
+        return self.items ==0
         ### END SOLUTION
 
     def __bool__(self):
@@ -194,6 +267,8 @@ class Queue:
 
     def __iter__(self):
         ### BEGIN SOLUTION
+        for i in range (self.head,self.tail,-1):
+            yield self.data[i]
         ### END SOLUTION
 
 ################################################################################
