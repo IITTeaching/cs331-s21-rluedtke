@@ -24,10 +24,43 @@ class Heap:
 
     def heapify(self, idx=0):
         ### BEGIN SOLUTION
+        k=True
+        while(k):
+            if(len(self.data) > self._left(idx)):
+                if(len(self.data) > self._right(idx)):
+                    v = self.key(self.data[idx])
+                    l = self.key(self.data[self._left(idx)])
+                    r = self.key(self.data[self._right(idx)])
+                    if(r > l):
+                        maxI = self._right(idx)
+                    else:
+                        maxI = self._left(idx)
+                else:
+                    maxI=self._left(idx)
+                    v=self.key(self.data[idx])
+                if(self.key(self.data[maxI])>v):
+                    temp = self.data[idx]
+                    self.data[idx] = self.data[maxI]
+                    self.data[maxI] = temp
+                    idx = maxI
+                else:
+                    k=False
+            else:
+                k=False
         ### END SOLUTION
 
     def add(self, x):
         ### BEGIN SOLUTION
+        if(len(self.data)==0):
+            self.data=[x]
+            return
+        self.data.append(x)
+        i=len(self.data)-1
+        while(i>0 and self.key(self.data[i])>=self.key(self.data[self._parent(i)])):
+            var=self.data[i]
+            self.data[i]=self.data[self._parent(i)]
+            self.data[self._parent(i)]=var
+            i=self._parent(i)
         ### END SOLUTION
 
     def peek(self):
@@ -130,6 +163,38 @@ def test_key_heap_5():
 ################################################################################
 def running_medians(iterable):
     ### BEGIN SOLUTION
+    min = Heap(lambda x:-x) 
+    max = Heap(lambda x:x)
+    lst = [iterable[0]]
+    var = iterable[0]
+    toAppend = iterable[0] 
+    i=1
+    while(i<len(iterable)):
+        if(var>iterable[i]):
+            if(len(max.data) > len(min.data)):
+                max.add(iterable[i])
+                min.add(var)
+                temp = max.pop()
+                var = temp
+            else:
+                max.add(iterable[i])
+        else:
+            if(len(max.data) < len(min.data)):
+                min.add(iterable[i])
+                max.add(var)
+                temp = min.pop()
+                var = temp     
+            else:
+                min.add(iterable[i])
+        if(len(max) > len(min)):
+            toAppend = (max.peek() + var) / 2
+        elif(len(min) > len(max)):
+            toAppend = (min.peek() + var) / 2
+        else:
+            toAppend = var
+        lst.append(toAppend)
+        i+=1  
+    return lst
     ### END SOLUTION
 
 ################################################################################
@@ -174,6 +239,24 @@ def test_median_3():
 ################################################################################
 def topk(items, k, keyf):
     ### BEGIN SOLUTION
+    h = Heap(lambda x:keyf(x)*-1)
+    i=0
+    while(i<k):
+        h.add(items[i])
+        i+=1
+    if(len(items)>k):
+        i=k
+        while(i<len(items)):
+            if(keyf(items[i])>keyf(h.peek())):
+                h.add(items[i])
+                h.pop()
+            i+=1
+    i=0
+    a=[None]*k
+    while(i<k):
+        a[k-i-1]=h.pop()
+        i+=1
+    return a
     ### END SOLUTION
 
 ################################################################################
