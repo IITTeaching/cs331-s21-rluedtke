@@ -15,6 +15,9 @@ class AVLTree:
 
         def rotate_left(self):
             ### BEGIN SOLUTION
+            n = self.right
+            self.val, n.val = n.val, self.val
+            self.right, n.right, self.left, n.left = n.right, n.left, n, self.left
             ### END SOLUTION
 
         @staticmethod
@@ -24,6 +27,19 @@ class AVLTree:
             else:
                 return max(1+AVLTree.Node.height(n.left), 1+AVLTree.Node.height(n.right))
 
+        def tmax(self):
+            if not self.right:
+                return self.val
+            return self.right.tmax()
+
+        def tmin(self):
+            if not self.left:
+                return self.val
+            return self.left.tmin()
+
+        def getBalance(self):
+            return height(self.right) - height(self.left)
+
     def __init__(self):
         self.size = 0
         self.root = None
@@ -31,16 +47,77 @@ class AVLTree:
     @staticmethod
     def rebalance(t):
         ### BEGIN SOLUTION
+        balance = t.getBalance()
+        if balance < -1:
+            t.rotate_right()
+            return t
+        if balance > 1:
+            t.rotate_left()
+        return t
         ### END SOLUTION
 
     def add(self, val):
         assert(val not in self)
         ### BEGIN SOLUTION
+        #print("++++++ADDING NODE+++++++")
+        def recur_add(n, val):
+            if not n:
+                return AVLTree.Node(val)
+            elif val < n.val:
+                n.left = recur_add(n.left, val)
+            else:
+                n.right = recur_add(n.right, val)
+            balance = n.getBalance()
+            if balance < -1:
+                if val > n.left.val:
+                    n.left.rotate_left()
+                self.rebalance(n)
+            if balance > 1:
+                if val < n.right.val:
+                    n.right.rotate_right()
+                self.rebalance(n)
+            return n
+        self.root = recur_add(self.root, val)
+        self.size += 1
         ### END SOLUTION
 
     def __delitem__(self, val):
         assert(val in self)
         ### BEGIN SOLUTION
+        #print("-------DELETING NODE-------")
+        def recur_del(n,val):
+            if not n:
+                return n
+            elif val < n.val:
+                n.left = recur_del(n.left, val)
+            elif val > n.val:
+                n.right = recur_del(n.right, val)
+            else:
+                if n.left == None:
+                    temp = n.right
+                    n = None
+                    return temp
+                elif n.right == None:
+                    temp = n.left
+                    n = None
+                    return temp
+                temp = n.right.tmin()
+                n.val = temp
+                n.right = recur_del(n.right, temp)
+            if n == None:
+                return n
+            balance = n.getBalance()
+            if balance < -1:
+                if n.left.getBalance() > 0:
+                    n.left.rotate_left()
+                self.rebalance(n)
+            if balance > 1:
+                if n.right.getBalance() < 0:
+                    n.right.rotate_right()
+                self.rebalance(n)
+            return n
+        self.root = recur_del(self.root,val)
+        self.size += -1
         ### END SOLUTION
 
     def __contains__(self, val):
@@ -120,6 +197,7 @@ def test_ll_fix_simple():
     t = AVLTree()
 
     for x in [3, 2, 1]:
+        t.pprint()
         t.add(x)
 
     tc.assertEqual(height(t.root), 2)
@@ -145,6 +223,7 @@ def test_lr_fix_simple():
 
     for x in [3, 1, 2]:
         t.add(x)
+    t.pprint()
 
     tc.assertEqual(height(t.root), 2)
     tc.assertEqual([t.root.left.val, t.root.val, t.root.right.val], [1, 2, 3])
