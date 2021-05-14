@@ -1,0 +1,60 @@
+
+<html>
+  <head>
+    <title>Lab 11 - Graded Solution</title>
+  </head>
+  <body>
+    <h1>Lab 11 - Graded Solution</h1>
+    <p><b>You scored 30% = 0.6 points for this lab.</b></p>
+    <ul>
+      <li><b>test_first</b>
+      <ul>
+      <li>Grade Percentage: 30</li>
+      <li>Your solution succeeded taking 0.089 sec</Li>
+      </ul>
+      </li>
+      <li><b>test_random</b>
+      <ul>
+      <li>Grade Percentage: 30</li>
+      <li>Your solution failed this test case! taking 0.097 sec</Li>
+<li><pre>NameError: name 'random' is not defined</pre></li>
+<li><pre>Traceback (most recent call last):
+  File "/Users/lord_pretzel/.pyenv/versions/3.7.4/lib/python3.7/site-packages/grader-0.0.1-py3.7.egg/grader/execution_base.py", line 63, in call_test_function
+    **pre_hook_info["extra_kwargs"]
+  File "/Users/lord_pretzel/.pyenv/versions/3.7.4/lib/python3.7/site-packages/grader-0.0.1-py3.7.egg/grader/core.py", line 48, in wrapper
+    result = test_function(module, *args, **kwargs)
+  File "/var/folders/f7/xnz8v_b13td37s3k4w8t5j2h0000gn/T/tmp9njyxjhw/lab11-test.py", line 47, in test_random
+    test_lists_with_pfn(m.module.pivot_random,m)
+  File "/var/folders/f7/xnz8v_b13td37s3k4w8t5j2h0000gn/T/tmp9njyxjhw/lab11-test.py", line 21, in test_lists_with_pfn
+    m.module.quicksort(lst, pfn)
+  File "<tested-program>", line 2, in quicksort
+  File "<tested-program>", line 17, in qsort
+  File "<tested-program>", line 28, in pivot_random
+NameError: name 'random' is not defined
+</pre></li>
+      </ul>
+      </li>
+      <li><b>test_median</b>
+      <ul>
+      <li>Grade Percentage: 40</li>
+      <li>Your solution failed this test case! taking 0.095 sec</Li>
+<li><pre>NameError: name 'statistics' is not defined</pre></li>
+<li><pre>Traceback (most recent call last):
+  File "/Users/lord_pretzel/.pyenv/versions/3.7.4/lib/python3.7/site-packages/grader-0.0.1-py3.7.egg/grader/execution_base.py", line 63, in call_test_function
+    **pre_hook_info["extra_kwargs"]
+  File "/Users/lord_pretzel/.pyenv/versions/3.7.4/lib/python3.7/site-packages/grader-0.0.1-py3.7.egg/grader/core.py", line 48, in wrapper
+    result = test_function(module, *args, **kwargs)
+  File "/var/folders/f7/xnz8v_b13td37s3k4w8t5j2h0000gn/T/tmpttwyovlt/lab11-test.py", line 54, in test_median
+    test_lists_with_pfn(m.module.pivot_median_of_three,m)
+  File "/var/folders/f7/xnz8v_b13td37s3k4w8t5j2h0000gn/T/tmpttwyovlt/lab11-test.py", line 21, in test_lists_with_pfn
+    m.module.quicksort(lst, pfn)
+  File "<tested-program>", line 2, in quicksort
+  File "<tested-program>", line 17, in qsort
+  File "<tested-program>", line 32, in pivot_median_of_three
+NameError: name 'statistics' is not defined
+</pre></li>
+      </ul>
+      </li>
+    </ul>
+  </body>
+</html>
